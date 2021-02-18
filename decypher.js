@@ -1,18 +1,33 @@
-et strCesar = 'YRMV PFL VMVI YRU R UIVRD EVF KYRK PFL NVIV JF JLIV NRJ IVRC NYRK ZW PFL NVIV LERSCV KF NRBV WIFD KYRK UIVRD YFN NFLCU PFL BEFN KYV UZWWVIVETV SVKNVVE KYV UIVRD NFICU REU KYV IVRC NFICU'
-for (let valeurDecalage = 0; valeurDecalage < 11; valeurDecalage++) {
-  let decodeStrCesar = ''
+strCesar = 'YRMV PFL VMVI YRU R UIVRD EVF KYRK PFL NVIV JF JLIV NRJ IVRC NYRK ZW PFL NVIV LERSCV KF NRBV WIFD KYRK UIVRD YFN NFLCU PFL BEFN KYV UZWWVIVETV SVKNVVE KYV UIVRD NFICU REU KYV IVRC NFICU'
+let wordDictionary = ['A', 'I', 'AM', 'AS', 'AT', 'BY', 'DO', 'GO', 'HE', 'IF', 'IN', 'IS', 'IT', 'ME',
+  'MY', 'NO', 'OF', 'ON', 'OR', 'SO', 'TO', 'WE', 'ARE', 'FOR', 'NOT', 'OFF', 'SHE', 'TOO', 'WHO',
+  'WHY', 'YES', 'YOU', 'THE']
+let decipheredStr = ''
+let maxMatchWord = 0
+let OffSetValue = 0
+
+for (let offSet = 0; offSet < 21; offSet++) {
+  let potentialDecypherStr = ''
   for (let index = 0; index < strCesar.length; index++) {
     if (strCesar[index] === ' ') {
-      decodeStrCesar += ' '
+      potentialDecypherStr += ' '
     }
     else {
       let asciiStrCesar = strCesar.charCodeAt(index)
-      let newAscii = asciiStrCesar + valeurDecalage
-      while (newAscii > 90) {
-        newAscii -= 26
+      let newAscii = asciiStrCesar + offSet
+      if (newAscii % 90 > 0 && newAscii % 90 < 65) {
+        newAscii = 64 + (newAscii % 90)
       }
-      decodeStrCesar += String.fromCharCode(newAscii)
+      potentialDecypherStr += String.fromCharCode(newAscii)
     }
   }
-  console.log(`Pour un décalage de ${valeurDecalage} :\n ${decodeStrCesar} \n`)
+  let wordsInPotentialDecypherStr = potentialDecypherStr.split(' ')
+  let wordsMatchDictionnary = wordsInPotentialDecypherStr.filter(word => wordDictionary.includes(word)).length
+  if (wordsMatchDictionnary > maxMatchWord) {
+    maxMatchWord = wordsMatchDictionnary
+    decypherStr = potentialDecypherStr
+    offSetValue = offSet
+  }
 }
+
+console.log(`La phrase décodée est : ${decypherStr} \nAvec un décalage de ${offSetValue}`)
